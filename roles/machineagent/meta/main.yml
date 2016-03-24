@@ -1,0 +1,7 @@
+---
+dependencies:
+  - {role: ntp}
+#
+# Ensures that the common role is always applied before
+# any task in this role starts running
+#

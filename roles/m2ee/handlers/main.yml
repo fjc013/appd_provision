@@ -1,0 +1,18 @@
+---
+# m2ee handlers
+# 
+# 1. (re)start the m2ee process after configuration
+#     called from felix tags within m2ee
+#
+- name: start m2ee 
+  shell: "{{ m2ee_pathToM2ee }} -c {{ m2ee_pathToYaml }} {{ m2ee_m2eeStart }}"
+  tags: [m2ee, felix]
+
+#
+- name: restart m2ee 
+  shell: "{{ m2ee_pathToM2ee }} -c {{ m2ee_pathToYaml }} {{ m2ee_m2eeRestart }}"
+  tags: [m2ee, felix]
+#
+- name: stop m2ee 
+  shell: "{{ m2ee_pathToM2ee }} -c {{ m2ee_pathToYaml }} {{ m2ee_m2eeStop }}"
+  tags: [m2ee, felix]

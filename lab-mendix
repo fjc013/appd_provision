@@ -1,0 +1,12 @@
+# Mendix targets
+#
+rndmendix01 
+rndmendix02 
+
+[mendix]
+10.240.242.11
+10.240.242.14
+
+[machine-agent]
+rndmendix01 
+rndmendix02 

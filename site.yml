@@ -1,0 +1,35 @@
+---
+#
+# This playbook deploys the appd machine agent on all hosts
+# it also ensures ntp is installed and running
+#
+- name: apply common configuration to all nodes
+  hosts: machine-agent
+  remote_user: root
+#
+  roles:
+    - ntp
+
+- name: configure and deploy appd machineagent.jar to all nodes
+  hosts: machine-agent
+  remote_user: root
+
+  roles:
+    - machineagent
+#
+- name: copy and unzip appagent
+  hosts: machine-agent
+  remote_user: root
+
+  roles:
+    - appagent
+
+#
+- name: Configure m2ee for AppD
+  hosts: machine-agent
+  remote_user: root
+
+  roles:
+    - m2ee
+
+# fin

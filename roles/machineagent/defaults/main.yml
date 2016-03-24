@@ -1,0 +1,40 @@
+# Moving MachineAgent files to the remote host
+# src_folder: /opt/appdynamics/Downloads/
+# src_file: MachineAgent.zip
+# dest_folder: /opt/appdynamics/machineagent/
+# dest_file: MachineAgent.zip
+#
+# Applying namespace syntax to variables to avoid inter-role conflicts
+# e.g., <roleName>_<someVariable>
+#
+# Configuring runtime parameters - jvm args
+# Used in template file
+#
+machineagent_controllerHostName: labappd01.itlab.com
+machineagent_controllerPort: 8090
+machineagent_applicationName: ACMEOnline
+machineagent_tierName: Inventory
+machineagent_nodeName: Inventory
+machineagent_accountAccessKey: e8c469e5-94a3-49d8-8efc-732ff91204fe
+machineagent_uniqueHostId: "{{ ansible_hostname }}"
+# Moved to vars/ renamed to machineagent_processName
+#machineagent_process: machineagent.jar
+machineagent_loggingDir: no
+machineagent_httpListenerState: no
+machineagent_httpListenerPort: no
+machineagent_serverHostName: no
+#
+# Machineagent start/stop script variables
+#
+machineagent_javaPath: /usr/bin/java
+machineagent_home: /opt/appdynamics/machineagent/
+machineagent_name: machineagent.jar
+machineagent_shellCmd: bin/machine-agent
+#
+# machineagent_processString: the string to search for during stop() of init script
+# Also, the name of the init script
+machineagent_processString: machineagent
+#
+# machineagent_redhatInitPath where RedHat keeps init scripts
+machineagent_redhatInitPath: /etc/rc.d/init.d/
+#

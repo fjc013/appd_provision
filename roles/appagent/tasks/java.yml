@@ -1,0 +1,30 @@
+---
+#
+# Tasks to uncover the type of Java environment the remote
+# host is using. The key attribute is 'java.vendor'. Expect 
+# to see one of these two:
+#
+# java.vendor = Oracle Corporation
+# java.vendor = IBM Coporation
+#
+# Java properties appear in StdErr, not StdOut, but can be funnelled there.
+#
+# Use set_fact to define which app agent to move to remote
+#
+- name: find JRE vendor for appd app agent
+  hosts: machine-agent
+#  Remote_user is found in ansible.cfg
+
+  tasks:
+    - shell: java -XshowSettings:properties -version 2>&1 | grep 'java.vendor'
+      register: java_properties
+
+    - set_fact:
+      java_vendor: oracle
+      when: "'Oracle' in java_properties.stdout"
+
+    - set_fact:
+      java_vendor: ibm 
+      when: "'IBM' in java_properties.stdout"
+
+  - debug: msg="Java vendor is {{ java_vendor }}"

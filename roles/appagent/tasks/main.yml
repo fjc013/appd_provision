@@ -1,0 +1,10 @@
+---
+#
+# - name: Install App Agent for java on remote host
+#
+# Set fact java_vendor for later
+#- include: java_vendor.yml
+#
+- include: appagent_centos.yml
+  when: ansible_os_family == "RedHat"
+

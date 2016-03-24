@@ -1,0 +1,7 @@
+---
+#
+# - name: Configure m2ee with appdynamics appagent
+#
+- include: m2ee_centos.yml
+  when: ansible_os_family == "RedHat"
+

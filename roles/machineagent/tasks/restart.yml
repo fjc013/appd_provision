@@ -1,0 +1,11 @@
+---
+# Prompt to restart machine agent 
+#
+- name: Prompt for machineagent restart
+  vars_prompt:
+    - name: "restart"
+      prompt: "Restart Machine Agent? [y,n]"
+      default: "y"
+      private: no
+      tags: machineagent
+#

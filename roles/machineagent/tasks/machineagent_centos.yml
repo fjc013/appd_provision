@@ -1,0 +1,54 @@
+---
+- name: Ensures {{machineagent_destFolder}} dir exists
+  file: path={{machineagent_destFolder}} state=directory
+  tags: machineagent
+# ---
+- name: Copy machine agent file
+# Source lives in roles/machineagent/file/{{ ansible_os_family }} subdirectory
+  copy: src={{ ansible_os_family }}/{{ machineagent_srcFile }} dest={{ machineagent_destFolder }}{{ machineagent_destFile }} force=no
+  tags: machineagent
+# ---
+- name: Unzip machine agent file
+  unarchive: src={{ machineagent_destFolder }}{{ machineagent_destFile }} dest={{machineagent_destFolder}} copy=no
+  tags: machineagent
+
+- name: Ensure machine agent file is executable
+  file: path="{{ machineagent_destFolder }}bin/machine-agent" mode=0755
+  tags: machineagent
+# ---
+- name: Kill process if running
+  shell: pkill --full {{ machineagent_processName }}
+  ignore_errors: yes
+  when: machineagent_restart == "y"
+  tags: machineagent
+#
+# ---
+- name: Starts the machine agent
+  command: "{{ machineagent_destFolder }}bin/machine-agent -Dappdynamics.controller.hostName={{ machineagent_controllerHostName }} -Dappdynamics.controller.port={{ machineagent_controllerPort }} -Dappdynamics.agent.uniqueHostId={{ ansible_hostname }} -Dappdynamics.agent.accountAccessKey={{ machineagent_accountAccessKey }}"
+  async: 315360000
+  poll: 0
+  tags: machineagent
+
+#
+# Create init script on remote - add OS derivative later
+#
+- name: Copy the machineagent init script
+  template: src=machineagent.j2 dest={{ machineagent_redhatInitPath }}{{ machineagent_processString }} mode=0755
+#  template: src=machineagent.j2 dest=/etc/rc.d/init.d/machineagent mode=0755
+  when: ansible_os_family == 'RedHat'
+  tags: 
+    - machineagent
+    - initscript
+
+#
+# Create appropriate symlinks for RedHat startup and shutdown
+#
+- name: Create init symlinks via chkconfig
+  shell: chkconfig --add {{ machineagent_processString }}
+  when: ansible_os_family == 'RedHat'
+  tags:
+    - machineagent
+    - initscript
+
+# 
+# fin

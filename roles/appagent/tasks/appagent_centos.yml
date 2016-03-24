@@ -1,0 +1,47 @@
+---
+# Tasks to uncover the type of Java environment the remote
+# # host is using. The key attribute is 'java.vendor'. Expect 
+# # to see one of these two:
+# #
+# # java.vendor = Oracle Corporation
+# # java.vendor = IBM Coporation
+# #
+# # Java properties appear in StdErr, not StdOut, but can be funnelled there.
+# #
+# # Use set_fact to define which app agent to move to remote
+# #
+# #  Remote_user is found in ansible.cfg
+#
+- shell: java -XshowSettings:properties -version 2>&1 | grep 'java.vendor'
+  register: java_properties
+  tags: appagent
+#
+- set_fact: java_vendor=oracle
+  when: "'Oracle' in java_properties.stdout"
+  tags: appagent
+#
+- set_fact: java_vendor=ibm
+  when: "'IBM' in java_properties.stdout"
+  tags: appagent
+#
+- debug: msg="Java vendor {{ java_vendor }} is"
+  tags: appagent
+#
+# Install the App Server Agent for java on RedHat derivatives
+#
+- name: Ensures {{ appagent_destFolder }} dir exists
+  file: path={{ appagent_destFolder }} state=directory
+  tags: appagent
+#
+- name: Copy app agent file archive
+  copy: src={{ ansible_os_family }}/{{ java_vendor }}/{{ appagent_srcFile }} dest={{ appagent_destFolder }}{{ appagent_destFile }} force=no
+  tags: appagent
+#
+- name: Unzip the App Agent file
+  unarchive: src={{ appagent_destFolder }}{{ appagent_destFile }} dest={{ appagent_destFolder }} copy=no
+  tags: appagent
+#
+- name: Ensure the app agent is executable
+  file: path={{ appagent_destFolder }}{{ appagent_processName }} mode=0755
+  tags: appagent
+#

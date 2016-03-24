@@ -1,0 +1,33 @@
+#ansible-playbook --private-key=~/.vagrant.d/insecure_private_key -u vagrant -i ./hosts  controller.yml
+
+# Mendix targets
+#
+rndmendix01 
+rndmendix02 
+
+[mendix]
+10.240.242.11
+10.240.242.14
+
+[controller]
+192.168.1.100
+
+[eum]
+192.168.1.101
+
+[eventsservice]
+192.168.1.102
+
+[machine-agent]
+rndmendix01 
+rndmendix02 
+# 23.92.24.120
+
+[tomcat]
+23.92.24.120
+
+[weblogic]
+23.92.24.120
+
+[websphere]
+23.92.24.120

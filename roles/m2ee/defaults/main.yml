@@ -1,0 +1,10 @@
+---
+# default values for Mendix m2ee provisioning
+# # use these vars for handlers
+#
+m2ee_pathToYaml: /home/mxapp/.m2ee/m2ee.yaml
+m2ee_pathToM2ee: /usr/bin/m2ee
+m2ee_m2eeStart: start
+m2ee_m2eeRestart: restart
+m2ee_m2eeStop: stop
+#

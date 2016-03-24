@@ -1,0 +1,93 @@
+#{{ ansible_managed }}
+#!/bin/bash 
+# 
+# Init file for AppDynamics Machine Agent 
+# 
+# chkconfig: 2345 60 25 
+# description: machine agent for AppDynamics
+
+#CHANGE ME: Set to the Java install directory 
+{% if machineagent_javaPath %}
+JAVA={{ machineagent_javaPath }}
+{% endif %}
+
+#CHANGE ME: Set to the agent's install directory 
+# Variable AGENT is not used - The machineagent shell script
+# is invoked in the start() function
+# 
+AGENT_HOME="{{ machineagent_home }}"
+AGENT="$AGENT_HOME{{ machineagent_name }}" 
+
+# Agent Options 
+AGENT_OPTIONS="" 
+
+{% if machineagent_applicationName %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dappdynamics.agent.applicationName={{ machineagent_applicationName }}" 
+{% endif %}
+
+{% if machineagent_loggingDir %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dappdynamics.agent.logging.dir={{ machineagent_loggingDir }}" 
+{% endif %}
+
+{% if machineagent_httpListenerState %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dmetric.http.listener={{ machineagent_httpListenerState }}"
+{% endif %}
+
+{% if machineagent_httpListenerPort %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dmetric.http.listener.port={{ machineagent_httpListenerPort }}" 
+{% endif %}
+
+{% if machineagent_serverHostName %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dserver.name={{ machineagent_serverHostName }}" 
+{% endif %}
+
+{% if machineagent_tierName %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dappdynamics.agent.tierName={{ machineagent_tierName }}"
+{% endif %}
+
+{% if machineagent_nodeName %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dappdynamics.agent.nodeName={{ machineagent_nodeName }}"
+{% endif %}
+
+{% if machineagent_controllerHostName %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dappdynamics.controller.hostName={{ machineagent_controllerHostName }}"
+{% endif %}
+
+{% if machineagent_controllerPort %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dappdynamics.controller.port={{ machineagent_controllerPort }}"
+{% endif %}
+
+{% if machineagent_uniqueHostId %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dappdynamics.agent.uniqueHostId={{ machineagent_uniqueHostId }}"
+{% endif %}
+
+{% if machineagent_accountAccessKey %}
+AGENT_OPTIONS="$AGENT_OPTIONS -Dappdynamics.agent.accountAccessKey={{ machineagent_accountAccessKey }}"
+{% endif %}
+
+start() 
+{ 
+# nohup $JAVA $AGENT_OPTIONS -jar -Xmx32m $AGENT > /dev/null 2>&1 & 
+nohup {{ machineagent_home }}{{ machineagent_shellCmd }} $AGENT_OPTIONS > /dev/null 2>&1 & 
+}
+
+stop() 
+{ 
+# ps -opid,cmd |egrep "[0-9]+ java.*machineagent" | awk '{print $1}' | xargs --no-run-if-empty kill -9 
+ps -eo pid,cmd |egrep "[0-9]+ java.*{{ machineagent_processString }}" | awk '{print $1}' | xargs --no-run-if-empty kill -9 
+}
+
+case "$1" in 
+start) 
+start 
+;; 
+stop) 
+stop 
+;; 
+restart) 
+stop 
+start 
+;; 
+*) 
+echo "Usage: $0 start|stop|restart" 
+esac
