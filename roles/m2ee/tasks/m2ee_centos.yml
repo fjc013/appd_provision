@@ -78,3 +78,12 @@
     - restart m2ee
   tags: [m2ee, felix]
 #
+- name: Send completion notice to Slack - simple, for now
+  local_action:
+    module: slack
+    token: "{{ m2ee_SlackToken }}"
+    channel: "{{ m2ee_SlackChannel }}"
+    msg: "{{ inventory_hostname }} m2ee set up completed"
+    username: "Root on {{ inventory_hostname }}"
+  tags: [m2ee, felix]
+

@@ -8,3 +8,8 @@ m2ee_m2eeStart: start
 m2ee_m2eeRestart: restart
 m2ee_m2eeStop: stop
 #
+# Slack API Token - try globalvars dir later
+#
+m2ee_SlackToken: T08GJ1W1X/B0Y5TRKHS/6Whm5kUT0j9qZp2SdCiF2Ygc 
+m2ee_SlackChannel: "#ansible-work"
+#
