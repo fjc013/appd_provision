@@ -1,0 +1,38 @@
+---
+# vars file for AppD m2ee instrumentation 
+#
+m2ee_homeDir: /home/mxapp/
+m2ee_configDir: .m2ee/
+m2ee_configFile: m2ee.yaml
+#
+m2ee_appAgentHome: /opt/appdynamics/appagent/
+m2ee_appAgentJar: javaagent.jar
+#
+# Add the javaagent path to javaopts. 
+# this will be the first jvm argument to suffix it with a comma
+# prefix with a 2 space padding
+#
+m2ee_jvmArg: '   \"-javaagent:{{ m2ee_appAgentHome }}{{ m2ee_appAgentJar }}\",'
+#
+m2ee_felixTemplate: felixconfig.properties.template
+#
+# define Template search expressions
+#
+m2ee_findSystem: 'org\.osgi\.framework\..*system\.packages'
+m2ee_findEnd: '^\s*sun\.nio\.cs$'
+#
+# Template boot delegation line
+m2ee_bootDelegation: "org.osgi.framework.bootdelegation=sun.misc,com.singularity.*"
+#
+# Template change current last line to add continuation syntax
+m2ee_sunNioCs: '\tsun.nio.cs,\x5C'
+#
+# Template class terminator
+m2ee_comSingularity: '\tcom.singularity'
+#
+m2ee_user: mxapp
+m2ee_script: /usr/bin/m2ee
+m2ee_restart: restart
+m2ee_start: start
+m2ee_stop: stop
+#

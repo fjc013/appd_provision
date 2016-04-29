@@ -1,0 +1,5 @@
+---
+# vars file for reset_m2ee
+#
+- include: reset_m2ee_vars.yml
+

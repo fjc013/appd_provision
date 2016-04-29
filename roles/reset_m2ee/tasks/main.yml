@@ -1,0 +1,35 @@
+---
+# tasks file for reset_m2ee
+# 1. Remove JVM arg line from javaopts list
+# 
+- name: Delete m2ee jvmArg line
+  lineinfile: dest={{ m2ee_homeDir }}{{ m2ee_configDir }}{{ m2ee_configFile }}
+    line="{{ m2ee_jvmArg }}"
+    state=absent
+  tags: reset_m2ee
+#
+# 2. Restore felix properties file from original 
+# 2.1 Extract major path from yaml config file
+#
+- name: Register partial path to template file
+  shell: awk '/mxjar_repo/ {print $2}' {{ m2ee_homeDir }}{{ m2ee_configDir }}{{ m2ee_configFile }}
+  register: m2ee_majorPath
+  tags: reset_m2ee
+#
+# 2.2
+# # Use new variable to register full path to template
+# # Registered variables are dicts, and act like dicks if 
+# # not used correctly. Most often, stdout is what's needed.
+# #
+- name: Register full path to template file
+  shell: find {{ m2ee_majorPath.stdout }} -name {{ m2ee_felixTemplate }} -print
+  register: m2ee_templatePath
+  tags: reset_m2ee
+#
+# 2.3 Copy gold copy template file back to distribution runtime directory
+#
+- name: Copy Gold Copy Template file back to distribution directory
+  copy: src=felix_template_gold_copy dest={{ m2ee_majorPath.stdout }}
+  tags: reset_m2ee
+#
+
