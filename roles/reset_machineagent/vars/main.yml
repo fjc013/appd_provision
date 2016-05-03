@@ -1,0 +1,17 @@
+# Moving MachineAgent files to the remote host
+# Source file is in files/ roles dir
+machineagent_srcFile: MachineAgent.zip
+machineagent_destFolder: /opt/appdynamics/machineagent/
+machineagent_destFile: MachineAgent.zip
+#
+machineagent_processName: machineagent.jar
+#
+machineagent_processString: machineagent
+#
+## Restart the machineagent switch
+# This should be prompted for - somehow- vars_prompt:
+##
+machineagent_restart: "y"
+##
+#
+#

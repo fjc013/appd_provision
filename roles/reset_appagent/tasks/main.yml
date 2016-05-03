@@ -1,0 +1,11 @@
+---
+# tasks file for reset_appagent
+#
+# 1. To remove the App Agent, simply remove the directory at 
+#    {{ appagent_destFolder }}
+#
+- name: Delete AppAgent directory
+  file: path={{ appagent_destFolder }} state=absent
+  tags: reset_appagent
+#
+# fin

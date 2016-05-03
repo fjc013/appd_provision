@@ -9,4 +9,25 @@
 #
   roles:
     - reset_m2ee
+#
+- name: Remove appagent directory on all nodes
+  hosts: machine-agent
+  remote_user: root
+#
+  roles:
+    - reset_appagent
+#
+- name: Remove all traces of app agent on all nodes
+  hosts: machine-agent
+  remote_user: root
+#
+  roles:
+    - reset_machineagent
+#
+- name: Remove all traces of ntpd on all nodes
+  hosts: machine-agent
+  remote_user: root
+#
+  roles:
+    - reset_ntp
 # fin

@@ -1,0 +1,35 @@
+---
+# tasks file for reset_ntp
+#
+# 1. Stop the ntpd service
+# 2. Remove the ntpd config file
+# 3. Remove the ntpd and related packages
+#
+-   name: Add the OS specific variables
+    include_vars: "{{ ansible_os_family }}.yml"
+    tags: reset_ntp
+#
+# Stop the ntpd service
+- name: Stop the ntpd service
+  service:  name={{ ntp_service_name }} state=stopped
+  tags: reset_ntpd
+#
+# Remove the ntpd config file
+- name: Remove ntpd config file
+  file: path=/etc/ntp.conf state=absent
+  when: ansible_os_family == "RedHat"
+  tags: reset_ntp
+#
+-   name: Remove the required packages in RedHat derivatives
+    yum: name={{ item }} state=absent
+    with_items: ntp_pkgs
+    when: ansible_os_family == "RedHat"
+    tags: reset_ntp
+
+-   name: Remove the required packages in Debian derivatives
+    apt: name={{ item }} state=absent update_cache=yes
+    with_items: ntp_pkgs
+    environment: "{{ env }}"
+    when: ansible_os_family == "Debian"
+    tags: reset_ntp
+

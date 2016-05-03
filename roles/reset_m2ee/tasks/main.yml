@@ -28,6 +28,11 @@
 #
 # 2.3 Copy gold copy template file back to distribution runtime directory
 #
+# 2.3.1 Prior to copy, delete current template file
+- name: Remove current felix template
+  file: path={{ m2ee_templatePath.stdout }} state=absent
+  tags: reset_m2ee
+#
 - name: Copy Gold Copy Template file back to distribution directory
   copy: src=felix_template_gold_copy dest={{ m2ee_majorPath.stdout }}
   tags: reset_m2ee

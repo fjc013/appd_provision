@@ -1,0 +1,33 @@
+---
+# tasks file for reset_machineagent
+#
+# Remove appd machine agent from remote host
+# 1. kill the running process
+# 2. delete the rc symlinks (redhat)
+# 3. remove the init script (redhat)
+# 4. remove the machine agent destination folder
+#
+# 1. kill the running process
+- name: Kill the appd machine agent process
+  shell: pkill --full {{ machineagent_processName }}
+  ignore_errors: yes
+  tags: reset_machineagent
+#
+# 2. delete the rc symlinks
+- name: Remove (redhat) rc symlinks
+  shell: chkconfig --del {{ machineagent_processString }}
+  when: ansible_os_family == 'RedHat'
+  tags: reset_machineagent
+#
+# 3. delete the init script
+- name: Delete the machine agent init script
+  file: path=/etc/rc.d/init.d/machineagent state=absent
+  when: ansible_os_family == 'RedHat'
+  tags: reset_machineagent
+#
+# 4. Remove destination folder
+- name: Remove machine agent destination folder
+  file: path={{ machineagent_destFolder }} state=absent
+  tags: reset_machineagent
+#
+# fin

@@ -1,0 +1,6 @@
+---
+ntp_pkgs:
+  - libselinux-python
+  - ntp
+
+ntp_service_name: ntpd
